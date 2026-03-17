@@ -1,4 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ZenSU</string>
+    <string name="home">Home</string>
+    <string name="modules">Modules</string>
+    <string name="settings">Settings</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="language">Language</string>
+    <string name="appearance">Appearance</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
+    <string name="root_active">Root Active</string>
+    <string name="root_not_active">Root Not Active</string>
+    <string name="grant_root_access">Grant Root Access</string>
+    <string name="requesting_root">Requesting root access...</string>
+    <string name="root_required">Root access is required to use ZenSU.</string>
+    <string name="modules_installed">modules installed</string>
+    <string name="search_modules">Search modules...</string>
+    <string name="no_modules_found">No modules found</string>
+    <string name="install_module">Install Module</string>
+    <string name="select_zip_file">Select ZIP File</string>
+    <string name="module_details">Module Details</string>
+    <string name="webui">WebUI</string>
+    <string name="close">Close</string>
+    <string name="reboot">Reboot</string>
+    <string name="refresh">Refresh</string>
+    <string name="power_menu">Power Menu</string>
+    <string name="developer_options">Developer Options</string>
+    <string name="clear_cache">Clear Module Cache</string>
+    <string name="reload_modules">Reload Modules</string>
+    <string name="view_logs">View Root Logs</string>
+    <string name="test_notification">Test Notification</string>
+    <string name="developer_options_opened">Developer Options Opened!</string>
+    <string name="cache_cleared">Cache cleared</string>
+    <string name="modules_reloaded">Modules reloaded</string>
+    <string name="opening_logs">Opening logs...</string>
+    <string name="test_notification_sent">Test notification sent!</string>
+    <string name="select_language">Select Language</string>
+    <string name="root_not_found">Root Not Found</string>
+    <string name="install_root">Install Root</string>
+    <string name="quick_actions">Quick Actions</string>
+    <string name="a_highly_customizable">A highly customizable and user-friendly root manager for Android.</string>
 </resources>
