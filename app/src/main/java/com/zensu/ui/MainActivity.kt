@@ -22,6 +22,7 @@ import com.zensu.ui.navigation.bottomNavItems
 import com.zensu.ui.screens.home.HomeScreen
 import com.zensu.ui.screens.modules.ModulesScreen
 import com.zensu.ui.screens.settings.SettingsScreen
+import com.zensu.ui.theme.ThemeManager
 import com.zensu.ui.theme.ZenSUTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,6 +31,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Load saved theme preferences
+        val prefs = getSharedPreferences("zensu_prefs", 0)
+        val manualDarkModeSet = prefs.getBoolean("manual_dark_mode_set", false)
+        val darkModeValue = prefs.getBoolean("dark_mode_value", false)
+        ThemeManager.setDarkMode(!manualDarkModeSet, darkModeValue)
+        
         enableEdgeToEdge()
         setContent {
             ZenSUTheme {

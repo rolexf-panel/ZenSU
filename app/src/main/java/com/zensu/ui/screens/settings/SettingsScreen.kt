@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.zensu.ui.theme.ThemeManager
 import androidx.compose.foundation.isSystemInDarkTheme
 
 data class IconOption(
@@ -33,12 +34,22 @@ data class IconOption(
 @Composable
 fun SettingsScreen() {
     val context = LocalContext.current
-    val systemDarkMode = isSystemInDarkTheme()
-    var useSystemDarkMode by remember { mutableStateOf(true) }
-    var darkModeOverride by remember { mutableStateOf(systemDarkMode) }
-    var selectedIconUri by remember { mutableStateOf<Uri?>(null) }
+    val prefs = remember { context.getSharedPreferences("zensu_prefs", 0) }
     
+    var useSystemDarkMode by remember { mutableStateOf(!prefs.getBoolean("manual_dark_mode_set", false)) }
+    var darkModeOverride by remember { mutableStateOf(prefs.getBoolean("dark_mode_value", false)) }
+    
+    val systemDarkMode = isSystemInDarkTheme()
     val isDarkMode = if (useSystemDarkMode) systemDarkMode else darkModeOverride
+    
+    // Update ThemeManager when settings change
+    LaunchedEffect(useSystemDarkMode, darkModeOverride) {
+        ThemeManager.setDarkMode(useSystemDarkMode, darkModeOverride)
+        prefs.edit()
+            .putBoolean("manual_dark_mode_set", !useSystemDarkMode)
+            .putBoolean("dark_mode_value", darkModeOverride)
+            .apply()
+    }
     
     val presetIcons = listOf(
         IconOption("ZenSU", Icons.Default.Shield, Color(0xFF6750A4)),
@@ -55,11 +66,7 @@ fun SettingsScreen() {
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
-            selectedIconUri = it
-            context.getSharedPreferences("zensu_prefs", 0)
-                .edit()
-                .putString("custom_icon", it.toString())
-                .apply()
+            prefs.edit().putString("custom_icon", it.toString()).apply()
         }
     }
     
@@ -69,7 +76,7 @@ fun SettingsScreen() {
             .padding(16.dp)
     ) {
         Text(
-            text = "Settings",
+            "Settings",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
@@ -79,7 +86,7 @@ fun SettingsScreen() {
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "Appearance",
+                    "Appearance",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -95,14 +102,18 @@ fun SettingsScreen() {
                     Column(modifier = Modifier.weight(1f)) {
                         Text("Dark Mode", style = MaterialTheme.typography.bodyLarge)
                         Text(
-                            if (isDarkMode) "Following System (Dark)" else "Following System (Light)",
+                            if (isDarkMode) "Dark (System: ${if (systemDarkMode) "Dark" else "Light"})" 
+                            else "Light (System: ${if (systemDarkMode) "Dark" else "Light"})",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     Switch(
                         checked = useSystemDarkMode,
-                        onCheckedChange = { useSystemDarkMode = it }
+                        onCheckedChange = { 
+                            useSystemDarkMode = it
+                            ThemeManager.setDarkMode(it, darkModeOverride)
+                        }
                     )
                 }
                 
@@ -110,12 +121,16 @@ fun SettingsScreen() {
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Manual: ", style = MaterialTheme.typography.bodySmall)
+                        Text("Manual:", style = MaterialTheme.typography.bodySmall)
                         Switch(
                             checked = darkModeOverride,
-                            onCheckedChange = { darkModeOverride = it }
+                            onCheckedChange = { 
+                                darkModeOverride = it
+                                ThemeManager.setDarkMode(useSystemDarkMode, it)
+                            }
                         )
                     }
                 }
@@ -127,7 +142,7 @@ fun SettingsScreen() {
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "App Icon",
+                    "App Icon",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -141,8 +156,7 @@ fun SettingsScreen() {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier.clickable {
-                                context.getSharedPreferences("zensu_prefs", 0)
-                                    .edit()
+                                prefs.edit()
                                     .putString("selected_icon", iconOption.name)
                                     .remove("custom_icon")
                                     .apply()
@@ -194,12 +208,10 @@ fun SettingsScreen() {
                 Spacer(modifier = Modifier.height(12.dp))
                 
                 TextButton(onClick = {
-                    context.getSharedPreferences("zensu_prefs", 0)
-                        .edit()
+                    prefs.edit()
                         .remove("selected_icon")
                         .remove("custom_icon")
                         .apply()
-                    selectedIconUri = null
                 }) {
                     Icon(Icons.Default.Refresh, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
@@ -213,14 +225,14 @@ fun SettingsScreen() {
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "Font Settings",
+                    "Font Settings",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
                 
                 Spacer(modifier = Modifier.height(12.dp))
                 
-                var selectedFont by remember { mutableStateOf("System Default") }
+                var selectedFont by remember { mutableStateOf(prefs.getString("selected_font", "System Default") ?: "System Default") }
                 val fontOptions = listOf("System Default", "Sans Serif", "Serif", "Monospace")
                 
                 fontOptions.forEach { font ->
@@ -230,7 +242,10 @@ fun SettingsScreen() {
                     ) {
                         RadioButton(
                             selected = selectedFont == font,
-                            onClick = { selectedFont = font }
+                            onClick = { 
+                                selectedFont = font
+                                prefs.edit().putString("selected_font", font).apply()
+                            }
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
@@ -253,7 +268,7 @@ fun SettingsScreen() {
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "About",
+                    "About",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -266,7 +281,7 @@ fun SettingsScreen() {
                     Column(modifier = Modifier.weight(1f)) {
                         Text("ZenSU", style = MaterialTheme.typography.bodyLarge)
                         Text(
-                            "Version 1.0.4",
+                            "Version 1.0.5",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
