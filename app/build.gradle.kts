@@ -9,6 +9,15 @@ android {
     namespace = "com.zensu"
     compileSdk = 35
 
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a")
+            isUniversalApk = true
+        }
+    }
+
     defaultConfig {
         applicationId = "com.zensu"
         minSdk = 30
@@ -64,7 +73,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.8.2")
 
     // Compose BOM
-    implementation(platform("androidx.compose:compose-bom:2024.01.00"))
+    implementation(platform("androidx.compose:compose-bom:2024.02.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -81,10 +90,6 @@ dependencies {
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-
-    // libsu - Shell execution
-    implementation("com.topjohnwu:libsu-core:2.1.0")
-    implementation("com.topjohnwu:magisktools:2.1.0")
 
     // Network
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
