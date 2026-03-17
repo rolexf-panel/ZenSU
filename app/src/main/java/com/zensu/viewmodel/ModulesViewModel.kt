@@ -1,5 +1,7 @@
 package com.zensu.viewmodel
 
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zensu.detector.RootDetector
@@ -10,6 +12,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -76,6 +80,36 @@ class ModulesViewModel @Inject constructor() : ViewModel() {
                 filterModules()
             }
         }
+    }
+    
+    fun installModule(context: Context, uri: Uri): Boolean {
+        var success = false
+        viewModelScope.launch {
+            try {
+                // Copy file to temporary location
+                val inputStream = context.contentResolver.openInputStream(uri)
+                val tempFile = File(context.cacheDir, "temp_module.zip")
+                val outputStream = FileOutputStream(tempFile)
+                
+                inputStream?.copyTo(outputStream)
+                inputStream?.close()
+                outputStream.close()
+                
+                // Install module
+                success = ModuleRepository.installModule(tempFile.absolutePath)
+                
+                // Delete temp file
+                tempFile.delete()
+                
+                // Refresh modules list
+                if (success) {
+                    loadModules()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return success
     }
     
     fun refresh() {

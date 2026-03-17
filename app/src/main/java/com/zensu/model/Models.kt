@@ -24,7 +24,9 @@ data class Module(
     val description: String,
     val enabled: Boolean,
     val hasUpdate: Boolean = false,
-    val path: String = ""
+    val path: String = "",
+    val hasWebUI: Boolean = false,
+    val webUIUrl: String = ""
 )
 
 data class AppProfile(
