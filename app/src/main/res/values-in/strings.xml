@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ZenSU</string>
+    <string name="home">Beranda</string>
+    <string name="modules">Modul</string>
+    <string name="settings">Pengaturan</string>
+    <string name="dark_mode">Mode Gelap</string>
+    <string name="language">Bahasa</string>
+    <string name="appearance">Tampilan</string>
+    <string name="about">Tentang</string>
+    <string name="version">Versi</string>
+    <string name="root_active">Root Aktif</string>
+    <string name="root_not_active">Root Tidak Aktif</string>
+    <string name="grant_root_access">Berikan Akses Root</string>
+    <string name="requesting_root">Meminta akses root...</string>
+    <string name="root_required">Akses root diperlukan untuk menggunakan ZenSU.</string>
+    <string name="modules_installed">modul terpasang</string>
+    <string name="search_modules">Cari modul...</string>
+    <string name="no_modules_found">Tidak ada modul ditemukan</string>
+    <string name="install_module">Pasang Modul</string>
+    <string name="select_zip_file">Pilih File ZIP</string>
+    <string name="module_details">Detail Modul</string>
+    <string name="webui">WebUI</string>
+    <string name="close">Tutup</string>
+    <string name="reboot">Reboot</string>
+    <string name="refresh">Segarkan</string>
+    <string name="power_menu">Menu Daya</string>
+    <string name="developer_options">Opsi Pengembang</string>
+    <string name="clear_cache">Hapus Cache Modul</string>
+    <string name="reload_modules">Muat Ulang Modul</string>
+    <string name="view_logs">Lihat Log Root</string>
+    <string name="test_notification">Tes Notifikasi</string>
+    <string name="developer_options_opened">Opsi Pengembang Dibuka!</string>
+    <string name="cache_cleared">Cache dihapus</string>
+    <string name="modules_reloaded">Modul dimuat ulang</string>
+    <string name="opening_logs">Membuka log...</string>
+    <string name="test_notification_sent">Notifikasi tes dikirim!</string>
+    <string name="select_language">Pilih Bahasa</string>
+    <string name="root_not_found">Root Tidak Ditemukan</string>
+    <string name="install_root">Pasang Root</string>
+    <string name="quick_actions">Aksi Cepat</string>
+    <string name="a_highly_customizable">Manajer root yang sangat dapat disesuaikan dan ramah pengguna untuk Android.</string>
+</resources>

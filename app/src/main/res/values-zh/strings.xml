@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ZenSU</string>
+    <string name="home">首页</string>
+    <string name="modules">模块</string>
+    <string name="settings">设置</string>
+    <string name="dark_mode">深色模式</string>
+    <string name="language">语言</string>
+    <string name="appearance">外观</string>
+    <string name="about">关于</string>
+    <string name="version">版本</string>
+    <string name="root_active">Root已激活</string>
+    <string name="root_not_active">Root未激活</string>
+    <string name="grant_root_access">授予Root权限</string>
+    <string name="requesting_root">正在请求Root权限...</string>
+    <string name="root_required">使用ZenSU需要Root权限。</string>
+    <string name="modules_installed">个模块已安装</string>
+    <string name="search_modules">搜索模块...</string>
+    <string name="no_modules_found">未找到模块</string>
+    <string name="install_module">安装模块</string>
+    <string name="select_zip_file">选择ZIP文件</string>
+    <string name="module_details">模块详情</string>
+    <string name="webui">WebUI</string>
+    <string name="close">关闭</string>
+    <string name="reboot">重启</string>
+    <string name="refresh">刷新</string>
+    <string name="power_menu">电源菜单</string>
+    <string name="developer_options">开发者选项</string>
+    <string name="clear_cache">清除模块缓存</string>
+    <string name="reload_modules">重新加载模块</string>
+    <string name="view_logs">查看Root日志</string>
+    <string name="test_notification">测试通知</string>
+    <string name="developer_options_opened">开发者选项已打开！</string>
+    <string name="cache_cleared">缓存已清除</string>
+    <string name="modules_reloaded">模块已重新加载</string>
+    <string name="opening_logs">正在打开日志...</string>
+    <string name="test_notification_sent">测试通知已发送！</string>
+    <string name="select_language">选择语言</string>
+    <string name="root_not_found">未找到Root</string>
+    <string name="install_root">安装Root</string>
+    <string name="quick_actions">快捷操作</string>
+    <string name="a_highly_customizable">一款高度可定制的Android Root管理器。</string>
+</resources>

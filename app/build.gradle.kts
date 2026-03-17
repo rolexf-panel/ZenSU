@@ -22,8 +22,8 @@ android {
         applicationId = "com.zensu"
         minSdk = 30
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 7
+        versionName = "1.0.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -31,9 +31,19 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("/root/zensu.keystore")
+            storePassword = "zensu123"
+            keyAlias = "zensu"
+            keyPassword = "zensu123"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
