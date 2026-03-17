@@ -3,55 +3,62 @@ package com.zensu.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-private val DarkColorScheme = darkColorScheme(
-    primary = ZenPrimaryDark,
-    secondary = ZenSecondaryDark,
-    tertiary = ZenTertiaryDark,
-    background = ZenBackgroundDark,
-    surface = ZenSurfaceDark,
-    onPrimary = ZenOnPrimaryDark,
-    onSecondary = ZenOnSecondaryDark,
-    onBackground = ZenOnBackgroundDark,
-    onSurface = ZenOnSurfaceDark
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = ZenPrimary,
-    secondary = ZenSecondary,
-    tertiary = ZenTertiary,
-    background = ZenBackground,
-    surface = ZenSurface,
-    onPrimary = ZenOnPrimary,
-    onSecondary = ZenOnSecondary,
-    onBackground = ZenOnBackground,
-    onSurface = ZenOnSurface
-)
+object ThemeManager {
+    private val _darkMode = MutableStateFlow<Boolean?>(null)
+    val darkMode: StateFlow<Boolean?> = _darkMode.asStateFlow()
+    
+    fun setDarkMode(useSystem: Boolean, manualValue: Boolean? = null) {
+        _darkMode.value = if (useSystem) null else manualValue
+    }
+}
 
 @Composable
 fun ZenSUTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
+    val systemDark = isSystemInDarkTheme()
+    val manualDark = ThemeManager.darkMode.collectAsState()
+    
+    val darkTheme = manualDark.value ?: systemDark
+    
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> darkColorScheme(
+            primary = ZenPrimaryDark,
+            secondary = ZenSecondaryDark,
+            tertiary = ZenTertiaryDark,
+            background = ZenBackgroundDark,
+            surface = ZenSurfaceDark,
+            onPrimary = ZenOnPrimaryDark,
+            onSecondary = ZenOnSecondaryDark,
+            onBackground = ZenOnBackgroundDark,
+            onSurface = ZenOnSurfaceDark
+        )
+        else -> lightColorScheme(
+            primary = ZenPrimary,
+            secondary = ZenSecondary,
+            tertiary = ZenTertiary,
+            background = ZenBackground,
+            surface = ZenSurface,
+            onPrimary = ZenOnPrimary,
+            onSecondary = ZenOnSecondary,
+            onBackground = ZenOnBackground,
+            onSurface = ZenOnSurface
+        )
     }
 
     val view = LocalView.current
